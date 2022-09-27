@@ -1,4 +1,4 @@
-import connection from "../model/MySqlConnection.js"
+import * as UserModel from '../model/User.js'
 
 /*
 author - Shefali 
@@ -10,7 +10,7 @@ response - 200 OK
 */
 
 
-export const signUp = (req, res) => {
+export const signUp = async (req, res) => {
   try {
     console.log(req);
     const { name, emailId, phoneNumber } = req.body; // object destructuring
@@ -18,18 +18,13 @@ export const signUp = (req, res) => {
       res.status(400).send({ message: "Incomplete Information" });
       return;
     }
-    const query = `INSERT INTO user_login(name,email,mobile_no)
-        VALUES("${name}","${emailId}","${phoneNumber}");`;
-    connection.query(query, (error, rows) => {
-      if (error) {
-        return res.status(500).send({ message: error.message });
-      }
-      console.log(rows);
-     // const obj = rows[0];
-      //const id = obj.user_id;
-      return res.status(200).send({ message: "Success" });
-    });
+
+    await UserModel.createUser(name,emailId,phoneNumber)
+
+    return res.status(200).send({ message: 'Success' });
+    
   } catch (error) {
+    console.log(`[controller][loginController][Error]  ${error.message}`);
     return res.status(500).send({ message: error.message });
   }
 };

@@ -1,19 +1,13 @@
 
-const express = require('express');
+import express from "express";
+import router from "./route/index.js";
+import bodyParser from "body-parser";
+
 const port = 3000;
 const app = express();
-import * as mainRouter from './route/index.js';
-//const route = require('./route/index')
 
-app.use(mainRouter.router);
-
-
-
-
-
-
-
-
+app.use(bodyParser.json());
+app.use("/v1" ,router);
 
 
 
